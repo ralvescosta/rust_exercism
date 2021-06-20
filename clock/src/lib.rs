@@ -11,14 +11,19 @@ impl Display for Clock {
     }
 }
 
+fn calc_hours(hours: i32) -> i32 {
+    match hours {
+        h if h >= 24 => hours % 24,
+        h if h < 0 && h >= -24 => h + 24,
+        h if h < 0 => (h % 24) + 24,
+        h => h,
+    }
+}
+
 impl Clock {
     pub fn new(hours: i32, minutes: i32) -> Self {
-        let mut correctly_hours = match hours {
-            h if h >= 24 => hours % 24,
-            h if h < 0 && h >= -24 => h + 24,
-            h if h < 0 => h % 24 * -1,
-            h => h,
-        };
+        let mut correctly_hours = calc_hours(hours);
+
         let correctly_minutes = match minutes {
             m if m >= 60 => {
                 let ahead = m / 60;
@@ -30,13 +35,19 @@ impl Clock {
                 m - (60 * ahead)
             }
             m if m < 0 => {
-                let ahead = m / 60;
+                let ahead = (m * -1 / 60) + 1;
                 if ahead >= 24 {
-                    correctly_hours += ahead % 24;
+                    correctly_hours -= ahead % 24;
                 } else {
-                    correctly_hours += ahead;
+                    correctly_hours -= ahead;
                 }
-                m - (60 * ahead)
+                let mut min = m + (60 * ahead);
+                if min == 60 {
+                    min = 0;
+                    correctly_hours = calc_hours(correctly_hours + 1);
+                }
+                correctly_hours = calc_hours(correctly_hours);
+                min
             }
             m => m,
         };
