@@ -1,4 +1,4 @@
-# DOT DSL
+# DOT  DSL
 
 A [Domain Specific Language
 (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language) is a
