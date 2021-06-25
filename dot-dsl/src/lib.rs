@@ -1,4 +1,6 @@
 pub mod graph {
+    use graph_items::edge::Edge;
+    use graph_items::node::Node;
     use std::collections::HashMap;
 
     pub mod graph_items {
@@ -19,7 +21,11 @@ pub mod graph {
                         ..Edge::default()
                     }
                 }
-                pub fn with_attrs(self, attrs: &[(&str, &str)]) -> Self {
+                pub fn with_attrs(mut self, attrs: &[(&str, &str)]) -> Self {
+                    self.attrs = attrs
+                        .iter()
+                        .map(|(key, value)| (key.to_string(), value.to_string()))
+                        .collect();
                     return self;
                 }
             }
@@ -47,13 +53,22 @@ pub mod graph {
                         .collect();
                     return self;
                 }
+
+                pub fn get_attr(&self, attr_key: &str) -> Option<&str> {
+                    let attr_value = self.attrs.iter().find(|&a| a.0.as_str() == attr_key);
+
+                    match attr_value {
+                        None => Some(""),
+                        Some(a) => Some(a.1.as_str()),
+                    }
+                }
             }
         }
     }
-    #[derive(Clone, Eq, PartialEq, Debug)]
+    #[derive(Clone, Eq, PartialEq, Debug, Default)]
     pub struct Graph {
-        pub nodes: Vec<graph_items::node::Node>,
-        pub edges: Vec<graph_items::edge::Edge>,
+        pub nodes: Vec<Node>,
+        pub edges: Vec<Edge>,
         pub attrs: HashMap<String, String>,
     }
 
@@ -66,24 +81,32 @@ pub mod graph {
             }
         }
 
-        pub fn with_nodes(mut self, nodes: &Vec<graph_items::node::Node>) -> Self {
+        pub fn with_nodes(mut self, nodes: &Vec<Node>) -> Self {
             self.nodes = nodes.to_vec();
             return self;
         }
-        pub fn with_attrs(self, attrs: &[(&str, &str)]) -> Self {
+        pub fn with_attrs(mut self, attrs: &[(&str, &str)]) -> Self {
+            self.attrs = attrs
+                .iter()
+                .map(|(key, value)| (key.to_string(), value.to_string()))
+                .collect();
             return self;
         }
-        pub fn with_edges(self, edges: &Vec<graph_items::edge::Edge>) -> Self {
+        pub fn with_edges(mut self, edges: &Vec<Edge>) -> Self {
+            self.edges = edges.to_vec();
             return self;
         }
-        pub fn get_node(self, node: &str) -> Self {
-            return self;
+        pub fn get_node(&self, node: &str) -> Option<&Node> {
+            self.nodes.iter().find(|n| n.node == node.to_string())
         }
-        pub fn expect(self, expct: &str) -> Self {
-            return self;
-        }
-        pub fn get_attr(self, attr: &str) -> Option<&str> {
-            return Some("");
+
+        pub fn get_attr(&self, attr_key: &str) -> Option<&str> {
+            let attr_value = self.attrs.iter().find(|&a| a.0.as_str() == attr_key);
+
+            match attr_value {
+                None => Some(""),
+                Some(a) => Some(a.1.as_str()),
+            }
         }
     }
 }
