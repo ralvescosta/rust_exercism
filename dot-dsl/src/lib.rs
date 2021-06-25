@@ -3,11 +3,21 @@ pub mod graph {
 
     pub mod graph_items {
         pub mod edge {
-            #[derive(Clone, Eq, PartialEq, Debug)]
-            pub struct Edge;
+            use std::collections::HashMap;
+
+            #[derive(Clone, Eq, PartialEq, Debug, Default)]
+            pub struct Edge {
+                from: String,
+                to: String,
+                attrs: HashMap<String, String>,
+            }
             impl Edge {
                 pub fn new(s1: &str, s2: &str) -> Self {
-                    Edge {}
+                    Edge {
+                        from: s1.to_string(),
+                        to: s2.to_string(),
+                        ..Edge::default()
+                    }
                 }
                 pub fn with_attrs(self, attrs: &[(&str, &str)]) -> Self {
                     return self;
@@ -16,13 +26,25 @@ pub mod graph {
         }
 
         pub mod node {
-            #[derive(Clone, Eq, PartialEq, Debug)]
-            pub struct Node;
+            use std::collections::HashMap;
+
+            #[derive(Clone, Eq, PartialEq, Debug, Default)]
+            pub struct Node {
+                pub node: String,
+                pub attrs: HashMap<String, String>,
+            }
             impl Node {
                 pub fn new(s: &str) -> Self {
-                    Node {}
+                    Node {
+                        node: s.to_string(),
+                        ..Node::default()
+                    }
                 }
-                pub fn with_attrs(self, attrs: &[(&str, &str)]) -> Self {
+                pub fn with_attrs(mut self, attrs: &[(&str, &str)]) -> Self {
+                    self.attrs = attrs
+                        .iter()
+                        .map(|(key, value)| (key.to_string(), value.to_string()))
+                        .collect();
                     return self;
                 }
             }
@@ -38,13 +60,14 @@ pub mod graph {
     impl Graph {
         pub fn new() -> Self {
             Graph {
-                nodes: vec![graph_items::node::Node],
-                edges: vec![graph_items::edge::Edge],
+                nodes: Vec::new(),
+                edges: Vec::new(),
                 attrs: HashMap::new(),
             }
         }
 
-        pub fn with_nodes(self, nodes: &Vec<graph_items::node::Node>) -> Self {
+        pub fn with_nodes(mut self, nodes: &Vec<graph_items::node::Node>) -> Self {
+            self.nodes = nodes.to_vec();
             return self;
         }
         pub fn with_attrs(self, attrs: &[(&str, &str)]) -> Self {
