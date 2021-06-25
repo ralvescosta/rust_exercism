@@ -61,8 +61,15 @@ impl<T> SimpleLinkedList<T> {
         }
     }
 
-    pub fn rev(self) -> SimpleLinkedList<T> {
-        unimplemented!()
+    pub fn rev(mut self) -> SimpleLinkedList<T> {
+        let mut new = SimpleLinkedList::new();
+        let mut removed = self.pop();
+
+        while let Some(older) = removed {
+            new.push(older);
+            removed = self.pop();
+        }
+        new
     }
 }
 
