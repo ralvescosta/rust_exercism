@@ -9,13 +9,8 @@ impl PascalsTriangle {
         let mut triangle: Vec<Vec<u32>> = Vec::new();
 
         for row in 0..row_count {
-            if row == 0 {
-                triangle.push(vec![1 as u32]);
-                continue;
-            }
             triangle.push(vec![1 as u32]);
-            if row == 1 {
-                triangle[row as usize].push(1 as u32);
+            if row == 0 {
                 continue;
             }
             for column in 1..row {
@@ -29,7 +24,7 @@ impl PascalsTriangle {
         return PascalsTriangle { rows: triangle };
     }
 
-    pub fn rows(self) -> Vec<Vec<u32>> {
-        return self.rows;
+    pub fn rows(&self) -> Vec<Vec<u32>> {
+        return self.rows.clone();
     }
 }
