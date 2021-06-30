@@ -8,7 +8,7 @@ fn no_rows() {
 }
 
 #[test]
-#[ignore]
+
 fn one_row() {
     let pt = PascalsTriangle::new(1);
     let expected: Vec<Vec<u32>> = vec![vec![1]];
@@ -16,7 +16,7 @@ fn one_row() {
 }
 
 #[test]
-#[ignore]
+
 fn two_rows() {
     let pt = PascalsTriangle::new(2);
     let expected: Vec<Vec<u32>> = vec![vec![1], vec![1, 1]];
@@ -24,7 +24,7 @@ fn two_rows() {
 }
 
 #[test]
-#[ignore]
+
 fn three_rows() {
     let pt = PascalsTriangle::new(3);
     let expected: Vec<Vec<u32>> = vec![vec![1], vec![1, 1], vec![1, 2, 1]];
@@ -32,7 +32,7 @@ fn three_rows() {
 }
 
 #[test]
-#[ignore]
+
 fn last_of_four_rows() {
     let pt = PascalsTriangle::new(4);
     let expected: Vec<u32> = vec![1, 3, 3, 1];
@@ -40,7 +40,7 @@ fn last_of_four_rows() {
 }
 
 #[test]
-#[ignore]
+
 fn five_rows() {
     let pt = PascalsTriangle::new(5);
     let expected: Vec<Vec<u32>> = vec![
@@ -85,7 +85,7 @@ fn seven_rows() {
 }
 
 #[test]
-#[ignore]
+
 fn ten_rows() {
     let pt = PascalsTriangle::new(10);
     let expected: Vec<Vec<u32>> = vec![
