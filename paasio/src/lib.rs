@@ -1,5 +1,6 @@
 use std::{
-    io::{Read, Result, Write},
+    fs::File,
+    io::{self, Read, Result, Write},
     usize,
 };
 
