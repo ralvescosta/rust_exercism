@@ -1,6 +1,5 @@
 use std::{
-    fs::File,
-    io::{self, Read, Result, Write},
+    io::{Read, Result, Write},
     usize,
 };
 
@@ -10,9 +9,6 @@ pub struct ReadStats<R> {
     ops: usize,
 }
 impl<R: Read> ReadStats<R> {
-    // _wrapped is ignored because R is not bounded on Debug or Display and therefore
-    // can't be passed through format!(). For actual implementation you will likely
-    // wish to remove the leading underscore so the variable is not ignored.
     pub fn new(wrapped: R) -> ReadStats<R> {
         ReadStats {
             data: wrapped,
@@ -50,9 +46,6 @@ pub struct WriteStats<W> {
 }
 
 impl<W: Write> WriteStats<W> {
-    // _wrapped is ignored because W is not bounded on Debug or Display and therefore
-    // can't be passed through format!(). For actual implementation you will likely
-    // wish to remove the leading underscore so the variable is not ignored.
     pub fn new(wrapped: W) -> WriteStats<W> {
         WriteStats {
             data: wrapped,
