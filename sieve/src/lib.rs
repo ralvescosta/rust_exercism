@@ -1,5 +1,3 @@
-use std::{borrow::BorrowMut, u64};
-
 pub fn primes_up_to(upper_bound: u64) -> Vec<u64> {
     let mut primes: Vec<u64> = (2..upper_bound).map(|p| p).collect();
     let value: &mut u64 = &mut 2;
