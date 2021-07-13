@@ -8,11 +8,8 @@ pub struct Rna(String);
 
 impl Dna {
     pub fn new(dna: &str) -> Result<Dna, usize> {
-        for (i, n) in dna.chars().into_iter().enumerate() {
-            if n == 'A' || n == 'C' || n == 'G' || n == 'T' {
-                continue;
-            }
-            return Err(i);
+        if let Some(invalid) = dna.find(|n| n != 'A' && n != 'C' && n != 'G' && n != 'T') {
+            return Err(invalid);
         }
         return Ok(Dna(String::from(dna)));
     }
@@ -34,11 +31,8 @@ impl Dna {
 
 impl Rna {
     pub fn new(rna: &str) -> Result<Rna, usize> {
-        for (i, n) in rna.chars().into_iter().enumerate() {
-            if n == 'A' || n == 'C' || n == 'G' || n == 'U' {
-                continue;
-            }
-            return Err(i);
+        if let Some(invalid) = rna.find(|n| n != 'A' && n != 'C' && n != 'G' && n != 'U') {
+            return Err(invalid);
         }
         return Ok(Rna(String::from(rna)));
     }
