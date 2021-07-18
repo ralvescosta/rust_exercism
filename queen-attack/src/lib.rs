@@ -22,15 +22,13 @@ impl Queen {
     }
 
     pub fn can_attack(&self, other: &Queen) -> bool {
-        let mut rank_diff = self.0.rank - other.0.rank;
-        if rank_diff < 0 {
-            rank_diff *= -1
-        }
-        let mut file_diff = self.0.file - other.0.file;
-        if file_diff < 0 {
-            file_diff *= -1
-        }
-        if self.0.rank == other.0.rank || self.0.file == other.0.file || (rank_diff == file_diff) {
+        let rank_diff = self.0.rank - other.0.rank;
+        let file_diff = self.0.file - other.0.file;
+
+        if self.0.rank == other.0.rank
+            || self.0.file == other.0.file
+            || rank_diff.abs() == file_diff.abs()
+        {
             return true;
         }
         false
