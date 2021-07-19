@@ -45,6 +45,9 @@ impl Team {
 pub fn tally(match_results: &str) -> String {
     let matches = match_results.split("\n");
     let mut teams: Vec<Team> = vec![];
+    if match_results == "" {
+        return print(teams);
+    }
     for m in matches {
         let split: Vec<&str> = m.split(";").collect();
         let home_team = split[0].to_string();
@@ -62,9 +65,7 @@ pub fn tally(match_results: &str) -> String {
     teams.sort_by(|f, s| f.name[..1].cmp(&s.name[..1]));
     teams.sort_by(|f, s| s.point.cmp(&f.point));
 
-    let mut result = "".to_string() + "Team                           | MP |  W |  D |  L |  P\n";
-
-    String::from("")
+    print(teams)
 }
 
 fn winner_score(teams: &mut Vec<Team>, winner: String, looser: String) {
@@ -112,7 +113,7 @@ fn draw_score(teams: &mut Vec<Team>, home: String, visiting: String) {
             team.match_point += 1;
             team.draw += 1;
             team.point += 1;
-            has_visiting = false;
+            has_visiting = true;
         }
 
         if has_home && has_visiting {
@@ -125,4 +126,20 @@ fn draw_score(teams: &mut Vec<Team>, home: String, visiting: String) {
     if !has_visiting {
         teams.push(Team::new_drawer(visiting))
     }
+}
+
+fn print(teams: Vec<Team>) -> String {
+    let mut result = "".to_string() + "Team                           | MP |  W |  D |  L |  P";
+    if teams.len() <= 1 {
+        return result;
+    }
+
+    for team in teams {
+        result.push_str(&format!(
+            "\n{:<31}| {:>2} | {:>2} | {:>2} | {:>2} | {:>2}",
+            team.name, team.match_point, team.win, team.draw, team.loss, team.point
+        ))
+    }
+
+    result
 }
