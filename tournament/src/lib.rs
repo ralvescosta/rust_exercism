@@ -1,24 +1,22 @@
-use std::collections::HashMap;
-
 #[derive(Default)]
 struct Team {
-    Name: String,
-    MatchPoint: u32,
-    Win: u32,
-    Draw: u32,
-    Loss: u32,
-    Point: u32,
+    name: String,
+    match_point: u32,
+    win: u32,
+    draw: u32,
+    loss: u32,
+    point: u32,
 }
 
 impl Team {
     pub fn new(name: String) -> Self {
         Self {
-            Name: name,
-            MatchPoint: 0,
-            Win: 0,
-            Draw: 0,
-            Loss: 0,
-            Point: 0,
+            name,
+            match_point: 0,
+            win: 0,
+            draw: 0,
+            loss: 0,
+            point: 0,
         }
     }
 }
@@ -32,60 +30,78 @@ pub fn tally(match_results: &str) -> String {
         let visiting_team = split[1].to_string();
         let match_result = split[2];
 
-        if let Some(_) = teams.iter().find(|&t| t.Name == home_team) {
-        } else {
-            teams.push(Team::new(home_team.clone()))
-        }
-
-        if let Some(_) = teams.iter().find(|&t| t.Name == visiting_team) {
-        } else {
-            teams.push(Team::new(visiting_team.clone()))
-        }
-
         match match_result {
-            "win" => {
-                for team in teams.iter_mut() {
-                    if team.Name == home_team {
-                        team.MatchPoint += 1;
-                        team.Win += 1;
-                        team.Point += 3;
-                    }
-
-                    if team.Name == visiting_team {
-                        team.MatchPoint += 1;
-                        team.Loss += 1;
-                    }
-                }
-            }
-            "loss" => {
-                for team in teams.iter_mut() {
-                    if team.Name == visiting_team {
-                        team.MatchPoint += 1;
-                        team.Win += 1;
-                        team.Point += 3;
-                    }
-
-                    if team.Name == home_team {
-                        team.MatchPoint += 1;
-                        team.Loss += 1;
-                    }
-                }
-            }
-            "draw" => {
-                for team in teams.iter_mut() {
-                    if team.Name == home_team || team.Name == visiting_team {
-                        team.MatchPoint += 1;
-                        team.Draw += 1;
-                        team.Point += 1;
-                    }
-                }
-            }
+            "win" => winner_score(&mut teams, home_team, visiting_team),
+            "loss" => winner_score(&mut teams, visiting_team, home_team),
+            "draw" => draw_score(&mut teams, home_team, visiting_team),
             _ => (),
         }
     }
 
-    teams.sort_by(|f, s| f.Name[..1].cmp(&s.Name[..1]));
-    teams.sort_by(|f, s| s.Point.cmp(&f.Point));
+    teams.sort_by(|f, s| f.name[..1].cmp(&s.name[..1]));
+    teams.sort_by(|f, s| s.point.cmp(&f.point));
+
+    let mut result = "".to_string() + "Team                           | MP |  W |  D |  L |  P\n";
 
     String::from("")
+}
+
+fn winner_score(teams: &mut Vec<Team>, winner: String, looser: String) {
+    let mut has_winner = false;
+    let mut has_looser = false;
+    for team in teams.iter_mut() {
+        if team.name == winner {
+            team.match_point += 1;
+            team.win += 1;
+            team.point += 3;
+            has_winner = true;
+        }
+
+        if team.name == looser {
+            team.match_point += 1;
+            team.loss += 1;
+            has_looser = true;
+        }
+
+        if has_winner && has_looser {
+            break;
+        }
+    }
+
+    if !has_winner {
+        teams.push(Team::new(winner))
+    }
+    if !has_looser {
+        teams.push(Team::new(looser))
+    }
+}
+
+fn draw_score(teams: &mut Vec<Team>, home: String, visiting: String) {
+    let mut has_home = false;
+    let mut has_visiting = false;
+    for team in teams.iter_mut() {
+        if team.name == home {
+            team.match_point += 1;
+            team.draw += 1;
+            team.point += 1;
+            has_home = true;
+        }
+
+        if team.name == visiting {
+            team.match_point += 1;
+            team.draw += 1;
+            team.point += 1;
+            has_visiting = false;
+        }
+
+        if has_home && has_visiting {
+            break;
+        }
+    }
+    if !has_home {
+        teams.push(Team::new(home))
+    }
+    if !has_visiting {
+        teams.push(Team::new(visiting))
+    }
 }
