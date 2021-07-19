@@ -9,14 +9,35 @@ struct Team {
 }
 
 impl Team {
-    pub fn new(name: String) -> Self {
+    pub fn new_winner(name: String) -> Self {
         Self {
             name,
-            match_point: 0,
-            win: 0,
+            match_point: 1,
+            win: 1,
             draw: 0,
             loss: 0,
+            point: 3,
+        }
+    }
+
+    pub fn new_looser(name: String) -> Self {
+        Self {
+            name,
+            match_point: 1,
+            win: 0,
+            draw: 0,
+            loss: 1,
             point: 0,
+        }
+    }
+    pub fn new_drawer(name: String) -> Self {
+        Self {
+            name,
+            match_point: 1,
+            win: 0,
+            draw: 1,
+            loss: 0,
+            point: 1,
         }
     }
 }
@@ -69,10 +90,10 @@ fn winner_score(teams: &mut Vec<Team>, winner: String, looser: String) {
     }
 
     if !has_winner {
-        teams.push(Team::new(winner))
+        teams.push(Team::new_winner(winner))
     }
     if !has_looser {
-        teams.push(Team::new(looser))
+        teams.push(Team::new_looser(looser))
     }
 }
 
@@ -99,9 +120,9 @@ fn draw_score(teams: &mut Vec<Team>, home: String, visiting: String) {
         }
     }
     if !has_home {
-        teams.push(Team::new(home))
+        teams.push(Team::new_drawer(home))
     }
     if !has_visiting {
-        teams.push(Team::new(visiting))
+        teams.push(Team::new_drawer(visiting))
     }
 }
